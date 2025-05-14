@@ -1,4 +1,4 @@
-project scope for what v1.0.1 aims to achieve. For 
+project scope for what v1.0.0 aims to achieve. For 
 
 Dockerized Laravel app
 
