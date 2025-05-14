@@ -1,6 +1,6 @@
 FROM php:8.3-fpm
 
-#Here I am installing dependencies
+# Install system dependencies and PHP extensions
 RUN apt-get update && apt-get install -y \
     build-essential \
     zip \
@@ -16,11 +16,14 @@ RUN apt-get update && apt-get install -y \
     mariadb-client \
     && docker-php-ext-install pdo pdo_mysql zip
 
-#Here I am installing composer so I can use laravel
+# Install Redis PHP extension
+RUN pecl install redis && docker-php-ext-enable redis
+
+# Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-WORKDIR /var/www/html
-
-#Here I will install node.js and Npm so I can use vite build and other nodemodules in my laravel app
+# Install Node.js & npm
 RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
     && apt-get install -y nodejs
+
+WORKDIR /var/www/html
