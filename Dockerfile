@@ -26,4 +26,16 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
     && apt-get install -y nodejs
 
+RUN docker-php-ext-install pcntl
+
+RUN docker-php-ext-install sockets
+
+RUN apt-get update && apt-get install -y supervisor
+# Copy supervisor config
+COPY .docker/supervisor/reverb.conf /etc/supervisor/conf.d/reverb.conf
+COPY .docker/supervisor/supervisord.conf /etc/supervisord.conf
+
+# Start Supervisor
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
+
 WORKDIR /var/www/html
